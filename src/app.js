@@ -4,7 +4,7 @@ const Restaurant = require("../models/index")
 const db = require("../db/connection");
 
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({extended: true});
 
 //TODO: Create your GET Request Route Below: 
 app.get("/restaurants", async (req, res) => {
@@ -22,21 +22,18 @@ app.get("/restaurants/:id", async (req, res) => {
 )
 
 app.post("/restaurants", async (req, res) => {
-   await restaurant.push(req.body.restaurant)
-    res.json({ restaurant })
+   const restaurant = await Restaurant.create(req.body)
+    res.json( restaurant )
 })
 
 app.put("/restaurants/:id", async (req, res) => {
-    const parameter1 = req.params.id
-    const restaurant = parameter1
-    res.json({ restaurant })
+    const updatedRestaurant = await Restaurant.update(req.body, {where: {id: req.params.id}})
+    res.json({ updatedRestaurant })
 })
 
 app.delete("/restaurants/:id", async (req, res) => {
-    const parameter2 = req.params.id
-    const restaurants = parameter2
-    restaurants.splice(restaurants, 1)
-    res.json( { restaurants })
+    const deletedRestaurant = await Restaurant.destroy({where: {id: req.params.id}})
+    res.json( { deletedRestaurant })
 })
 
 module.exports = app;
